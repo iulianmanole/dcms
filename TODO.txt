@@ -1,5 +1,5 @@
 
-
+a
 
 === General 
  - fa un template standard pentru actiunile de view.
