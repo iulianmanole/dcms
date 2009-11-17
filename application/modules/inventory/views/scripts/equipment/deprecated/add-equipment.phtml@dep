@@ -1,0 +1,54 @@
+<?php
+/**
+----
+dojo equiv
+----
+dojo.registerModulePath("dcms","../../dcms");
+dojo.require("dcms.utils");
+dojo.addOnLoad(dcms.utils.);
+*/
+
+$this->dojo()->enable()
+			 ->registerModulePath("dcms",'../../dcms')
+	 		 ->requireModule('dcms.utils');
+
+$typeOptions = Zend_Json::encode( 
+			array(
+				'actionElem'=> 'type',
+				'action'=> 'onchange',
+				'form'=>'AddEquipment',
+				'toModify'=> 'div_product',
+				'url'=> '/inventory/equipment/update-products-list/format/html'
+			));
+$manufacturerOptions = Zend_Json::encode( 
+			array(
+				'actionElem'=> 'manufacturer',
+				'action'=> 'onchange',
+				'form'=>'AddEquipment',
+				'toModify'=> 'div_product',
+				'url'=> '/inventory/equipment/update-products-list/format/html'
+			));		
+$locationOptions = Zend_Json::encode( 
+			array(
+				'actionElem'=> 'location',
+				'action'=> 'onchange',
+				'form'=>'AddEquipment',
+				'toModify'=> 'div_rack',
+				'url'=> '/inventory/equipment/update-racks-list/format/html'
+			));		
+					
+			
+/**
+ * FUNCTIA PE CARE VREM SA O RULAM NU POATE FI APELATA DIRECT CU PARAMETRI
+ * SI DE ACEEA AM PUS-O INTR-O FUNCTIE FARA PARAM. 
+ */
+			
+$this->dojo()->addOnLoad("function(){dcms.utils.modifyElem($typeOptions);}");
+$this->dojo()->addOnLoad("function(){dcms.utils.modifyElem($manufacturerOptions);}");
+$this->dojo()->addOnLoad("function(){dcms.utils.modifyElem($locationOptions);}");
+
+
+/** Display form */
+echo $this->form;
+
+?>

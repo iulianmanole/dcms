@@ -1,0 +1,24 @@
+WorkFlow si implementare.
+
+EquipmentController -> addEquipmentAction
+	1. Afiseaza Form-ul 	
+			a. Incarca form-ul : forms_EquipmentAdd
+			b. Afiseaza view-ul add-equipment
+				
+		
+	2. Prelucreaza form-ul
+			a. prelucreaza : forms_EquipmentAdd
+			b. afiseaza rezultatul, folosind view-ul : .......
+			
+		
+EquipmentController -> updateModelsListAction 
+	1. populeaza select-ul eqModels definit in forms_EquipmentAdd
+	2. trimite select-ul ( in format html ) pentru a fi updatat dinamic, folosind ajax
+		
+Views 
+	1. add-equipment
+		a. defineste 2 observatori care detecteaza modificarile ce apar in campurile 
+			typeSelect si eqManufacturer. In functie de aceste modificari se va defini lista 
+			de modele. 
+			Observatorii vor accesa updateModelsListAction 
+		

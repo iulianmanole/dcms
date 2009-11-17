@@ -1,0 +1,21 @@
+
+<?php
+
+Zend_Debug::dump($this->data);
+ ?>
+
+
+<table cellpadding="1" border="1">
+<?php
+	foreach ($this->data as $row ) {
+		echo "<tr>";
+		foreach ($row as $col => $value ) {
+			echo "<td>";
+			echo $value;
+			echo "</td>";
+		}
+		echo "</tr>";
+	}
+
+?>
+</table>

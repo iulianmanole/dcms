@@ -1,0 +1,29 @@
+
+<?php  //Zend_Debug::dump($this->paginator->getCurrentItems());?>
+<?php if (count($this->paginator)): ?>
+	<table border="1" cellspacing="0" cellpadding="4">
+
+		<?php $isDisplayedTableHead = false;  ?>
+
+		<?php foreach ($this->paginator as $item):?> 
+
+			<!-- we'll display table head if is not displayed -->
+			<?php if ( !$isDisplayedTableHead ):?>	
+				<tr>
+					<?php foreach ($item as $attr => $value): ?>
+							<td> <?= $attr; ?> </td>					
+					<?php endforeach; ?>
+				</tr>
+				<?php $isDisplayedTableHead = true; ?>
+			<?php endif; ?>
+			
+			<!-- print table data -->
+			<tr>
+				<?php foreach ($item as $attr => $value): ?>
+						<td> <?= $value; ?> </td>					
+				<?php endforeach; ?>
+			</tr>
+		  	
+		<?php endforeach; ?>
+	</table>
+<?php endif; ?>

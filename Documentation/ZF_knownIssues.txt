@@ -1,0 +1,10 @@
+PROBLEMe: 
+
+1. 
+	InArray Validator - este inregistrat automat in Zend/Form/Element/Multi ( registerInArrayValidator = true)
+						Acesta verifica daca valoarea elemuntului apartine valorilor default ale elementului.
+						
+	Exista o problema pentru elementele care se updateaza dupa publicare ( Folosind Ajax).
+	
+	Deocamdata acest validator este pus pe false, by default.
+						    

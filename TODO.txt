@@ -1,0 +1,54 @@
+
+
+
+=== General 
+ - fa un template standard pentru actiunile de view.
+ - logarea centralizata a tuturor mesajelor. (Un Logger Centralizat) - a fost realizat logger-ul. 
+ - fiecare Model_XXXGateway trebuie sa fie capabil sa faca o filtrare a tuturor obiectelor din domeniul sau, pe baza a unuia sau a mai multor atribute. 
+	Exemplu Se poate face o selectie a echipamentelor pe baza tipului Hw, Producatorului, etc. 
+[Working ON]- implementeaza Organizatoare Systems si Groups 	
+
+	 - integrare cu echipamentele (butoane SetGroup si SetSystem in EquipmentCOntroller)
+ - gaseste o metoda de a introduce toate actiunile pentru un paginator 
+
+
+=== Group & System Functionality  === 
+
+[ok] - adaugat GroupCOntroller
+[ok] - adaugat actiunea "SetGroup" in EquipmentController, trebuie testata 
+ - de facut viewer-ul pentru echipamente care sa arate si grupurile din care face parte.
+
+	
+=== HwProductController ===
+
+[ok] - testeaza functionalitatea. Ar trebuie sa mearga ok. 
+ - rezolva eroarea care apare atunci cand vrei sa stergi un produs care are atasat mai multe echipamente de el. 
+ 
+ 
+=== RackController 
+
+[ok] - testeaza functionalitatea si reimplementeaza 
+
+=== Equipment Controller 
+[ok] - testeaza functionalitatea si reimplementeaza 
+[ok] - atributele Locatie si Rack trebuie sa apara la :
+[ok]		- adaugarea unui echipament si 
+[ok]		- schimbarea locatiei.
+    - adauga Starea echipamentelor ( Productie / Test / Decomisionat/ etc. )
+	- adauga si alte atribute necesare pentru echipamente ( data de achizitie/perioada de garantie/etc...)
+	- fa view-ul unde sa arate toate detaliile echipamentului.
+
+=== Paginator View
+ - pentru fiecare displayAttribute adauga un parametru care sa indice procentul spatiului ocupat de acea coloana. 
+ 
+ 
+=== Mesaje
+ - implementeaza o biblioteca care sa pastreze toate mesajele.
+ - fiecare mesaj va avea un identificator(nume) unic. 
+ - la nivel de aplicatie referirea catre mesaje va fi facuta doar prin intermediul identificatorilor acestora. 
+ - in acest fel, traducerile ulterioare vor putea fi facute foarte usor. 
+ - trebuie facuta o separare intre mesajele trimise de aplicatie si elementele de interfata grafica (ex: titluri, butoane, etc)
+= urmatoarele categorii trebui implementate: 
+ - mesaje ce vor fi salvate in loguri 
+ - mesaje de executie la nivel de interfata grafica 
+ - elemente ale interfetei grafice. 

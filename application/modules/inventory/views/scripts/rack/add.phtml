@@ -1,0 +1,34 @@
+<?php
+
+$model 	= $this->model; 
+$form 	= $model->getForm('add');
+//Zend_Debug::dump($form->getValues(),'formValues in add.phtml');
+
+
+$form->setName('rack_add')
+	 ->setMethod('post')
+	 ->setAction('/inventory/rack/process-add') ;
+	 
+
+$form->updateHwProductIdElement($form->getValues());
+	 
+//--- Set dojo elements behaviour
+$this->dojo()->enable()
+			 ->registerModulePath("dcms",'/public/js/dcms/')
+	 		 ->requireModule('dcms.utils');
+
+ 
+$hwProductOptions = Zend_Json::encode(
+			array(
+				'actionElem'=> 'manufacturer',
+				'action'	=> 'onchange',
+				'form'		=> 'rack_add',
+				'toModify'	=> 'div_hw_product_id',
+				'url'		=> '/inventory/rack/update-rack-product-list/format/html'
+			));	 
+	 
+$this->dojo()->addOnLoad("function(){dcms.utils.modifyElem($hwProductOptions);}");	 
+ 
+?>
+
+<?= $form; ?>

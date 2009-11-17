@@ -1,0 +1,63 @@
+<?php
+
+/* Load Zend_Controller_Action class */
+require_once 'Inno/Controller/Action.php';
+
+class Inventory_TypeHwController extends Inno_Controller_Action_BaseForm
+{
+	protected $_modelName = 'dcms_TypesHw';
+
+	protected $_formName  = 'forms_TypeHw';
+
+	protected $_mapFormToModel = array ('type' => 'type');
+
+	
+	public function init ()
+	{
+		parent::init();
+	}
+	
+	/** add a Equipment model to db */
+	public function addAction()
+	{
+		//Display the form
+		if (!$this->getRequest()->isPost()) {
+			$this->view->form = $this->getForm();
+			return $this->render('add');
+		}
+		
+		//Add form values to model
+		$this->addDataToModel();
+		
+		$this->getRedirector()->gotoSimple('list');
+	}
+	
+	public function deleteAction()
+	{
+		$toDeleteIds = $this->getRefPKs();
+		
+		$this->deleteIds($toDeleteIds);
+		
+		$this->getRedirector()->gotoSimple('list');
+		
+	}
+	
+	public function listAction()
+	{
+				$extPaginator = new Inno_Paginator_Extended(
+									$this->getModel()->selectElements(),	
+									array('delete'=> array(
+														'action' => 'delete'),
+										  'move'  => array(
+														'action' => 'move'),
+									));
+		
+		
+		/** run extended paginator */
+		$extPaginator->setTitle('Hardware Types');														
+		$this->runExtendedPaginator( $extPaginator );						
+	}							
+									
+}
+
+?>

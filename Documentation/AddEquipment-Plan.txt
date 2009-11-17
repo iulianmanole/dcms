@@ -1,0 +1,17 @@
+Add a new Equipment
+
+1. Browser receives the form ( /equipment/add )
+2. Optionally, user can update location list, using the addLocation subform	
+	2.1 XHR to UpdateLocationList with the newLocation and toUpdate (/Equipment/updateLocationList)
+		2.1.1 toUpdate will contain the element that must be updated 
+	2.2 UpdateLocationList tries to add the new location ( using dcms_Location->add() )
+	2.3 if successful, it retrieves the updated list ( using dcms_Location->find... )
+	2.4 Update the Element that contains the Location List
+3. Submit the new equipment form
+4. The form is proccessed
+
+
+
+
+[Things Done]
+1. Add the locationList to form_Equipment....   

@@ -1,0 +1,11 @@
+<?php
+
+$model 	= $this->model; 
+$form 	= $model->getForm('add');
+
+$form->setMethod('post')
+	 ->setAction('/inventory/pwr-distribution-unit/process-add'); 
+
+?>
+
+<?= $form; ?>

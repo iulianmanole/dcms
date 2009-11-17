@@ -1,0 +1,8 @@
+
+#ignore all files that start with "." (hidden files)
+*.externalToolBuilders
+*.project
+*.buildpath
+*.settings
+htdocs/mediawiki-1.15.0
+htdocs/webgrind

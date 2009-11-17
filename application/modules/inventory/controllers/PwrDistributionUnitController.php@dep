@@ -1,0 +1,67 @@
+<?php
+
+/* Load Zend_Controller_Action class */
+require_once 'Inno/Controller/Action.php';
+
+class Inventory_PwrDistributionUnitController extends Inno_Controller_Action_BaseForm
+{
+	protected $_modelName = 'dcms_PwrDistributionUnits';
+
+	protected $_formName  = 'forms_PwrDistributionUnit';
+
+	protected $_mapFormToModel = array ('name' => 'name');
+
+	
+	public function init ()
+	{
+		parent::init();
+	}
+	
+	/** add a Equipment model to db */
+	public function addAction()
+	{
+		//Display the form
+		if (!$this->getRequest()->isPost()) {
+			$this->view->form = $this->getForm();
+			return $this->render('add');
+		}
+		
+		//Add form values to model
+		$this->addDataToModel();
+		
+		$this->getRedirector()->gotoSimple('list');
+	}
+	
+	public function deleteAction()
+	{
+		$toDeleteIds = $this->getRefPKs();
+		
+		$this->deleteIds($toDeleteIds);
+			
+		//echo Zend_Debug::dump($this->getRequest()->getParams());
+		//redirects to the 
+		$this->getRedirector()->gotoSimple($this->getRequest()->getParam('action'),
+											$this->getRequest()->getParam('controller'),
+											$this->getRequest()->getParam('module'));
+		
+	}
+	
+	public function listAction()
+	{
+		$extPaginator = new Inno_Paginator_Extended(
+									$this->getModel()->selectElements(),	
+									array('delete'=> array(
+														'action' => 'delete'),
+										  'move'  => array(
+														'action' => 'move'),
+									));
+		
+		
+		/** run extended paginator */
+		$extPaginator->setTitle('Power Distribution Units');														
+		$this->runExtendedPaginator( $extPaginator );						
+	}							
+									
+}
+
+?>

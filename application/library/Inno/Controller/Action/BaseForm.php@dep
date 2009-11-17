@@ -1,0 +1,259 @@
+<?php
+
+/**
+ * Basic Controller Class, that defines default behaviour for form enabled
+ * action controllers.
+ */
+
+
+require_once 'Inno/Controller/Action.php';
+
+abstract class Inno_Controller_Action_BaseForm extends Inno_Controller_Action
+{
+	protected $_formName = '';
+
+	protected $_modelName = '';
+
+	/**
+	 * map the form fields to db keys.
+	 * This map will be used to insert, edit, values.
+	 */
+	protected $_mapFormToModel = array ();
+
+	private $_form;
+
+	/**
+	 * model that will be used to retrieve data
+	 * it must implement Inno_Db_Table_BaseFormInterface
+	 *
+	 */
+	private $_model;
+
+	public function init()
+	{
+		parent::init();
+	}
+	public function getFormName()
+	{
+		return $this->_formName;
+	}
+
+	public function getModelName()
+	{
+		return $this->_modelName;
+	}
+
+	/**
+	 * Singleton - get Form Instance
+	 * @return Inno_Dojo_Form
+	 */
+	public function getForm()
+	{
+		if (!isset($this->_form)){
+			$formName = $this->getFormName();
+			if (class_exists($formName)) {
+				$this->_form = new $formName();
+			}
+			else {
+				throw new Inno_Controller_Action_BaseForm_Exception("Form Class $formName could not be found in path");
+			}
+		}
+
+		return $this->_form;
+	}
+
+	/**
+	 * retrieve the current action as a string 	"/module/controller/action"
+	 *					 					or 	"/controller/action"
+	 * 										or 	"/action",
+	 * based on $request object
+	 * @param $request Object $request
+	 *
+	 * @return string
+	 */
+	public function getActionAsString(Zend_Controller_Request_Http $request)
+	{
+		$module = $request->getModuleName() !== null ? $request->getModuleName().'/' : '';
+		$ctrl 	= $request->getControllerName() !== null ? $request->getControllerName().'/' : '';
+		$action = $request->getActionName() !== null ? $request->getActionName() : '';
+
+		$str = '/'.$module.$ctrl.$action;
+		//Zend_Debug::dump($str);
+		return $str;
+	}
+
+	/**
+	 * Singleton - get Model Instance
+	 * @return Inno_Db_Table_Abstract, Inno_Db_Table_BaseFormInterface
+	 *
+	 */
+	public function getModel()
+	{
+		if (!isset($this->_model)){
+			$modelName = $this->getModelName();
+
+			if (class_exists($modelName)) {
+				$this->_model = new $modelName();
+
+				//check correct interface implementation
+				if ( !($this->_model instanceof Inno_Db_Table_BaseFormInterface) ) {
+					throw new Inno_Controller_Action_BaseForm_Exception(
+										"Model $this->_modelName  doesn't ".
+										"implement Inno_Db_Table_BaseFormInterface");
+				}
+			}
+			else {
+				throw new Inno_Controller_Action_BaseForm_Exception("Model Class $modelName could not be found in path");
+			}
+		}
+		return $this->_model;
+	}
+
+	/**
+	 * Perform the workflow for the add action
+	 */
+	public function addDataToModel()
+	{
+		echo 'in AddDataToModel';
+			
+		$form = $this->getForm();
+		//Zend_Debug::dump($form);
+			
+		if ($form->isValid($_POST)) {
+
+			//construct data to be inserted
+			$data = array();
+			foreach ($this->_mapFormToModel as $formElem => $modelElem){
+				$data[$modelElem] = $form->getValue($formElem);
+			}
+
+			//insert data to db table
+			//Zend_Debug::dump($data);
+			$result = $this->getModel()->insert($data);
+
+			/**
+			 * @todo The result should add a flashMessage and the redirect should be performed in
+			 * 		 the parent action.
+			 */
+			if ($result) {
+				$this->getFlashMessenger()->addMessage('ACTION_END_OK');
+			}
+			else {
+				$this->getFlashMessenger()->addMessage('ACTION_END_NOK');
+			}
+		}
+		else {
+			//@todo Proper error display
+			// Form validation failed. Errors should be displayed.
+			Zend_Debug::dump($form->getMessages());
+		}
+	}
+	/**
+	 * delete a set of ids from Model.
+	 */
+	public function deleteIds($ids)
+	{
+		$deletedRows = $this->getModel()->deleteIds($ids);
+
+		$objectName = $deletedRows-1 ? 'objects' : 'object';
+		$msg = 'You have deleted '.$deletedRows.' '.$objectName;
+		$this->getFlashMessenger()->addMessage($msg);
+	}
+
+	public function prepareToRender()
+	{
+	}
+	/**
+	 *  Based on the request, run ExtendedPaginator
+	 * Case 1: This action a POST action
+	 * 		- Controller will
+	 *
+	 *  If this is not a post action, set the extended Paginator to be displayed in the view.
+	 *  Manually, you must echo the paginator in your action script.
+	 *  If this is a post action, the function will try to run paginator submited action, if any.
+	 */
+	public function runExtendedPaginator(Inno_Paginator_Extended $extPaginator)
+	{
+		$extPaginator->init($this->getRequest());
+
+		//Init view->paginators
+		if ( isset($this->view->paginators)) {
+			$paginators = $this->view->paginators;
+		}
+		else {
+			$paginators = array();
+		}
+		$this->view->paginators = $paginators;
+
+		//Based on request type will attach the paginator to the view
+		//	 or try to execute the paginator's selected action.
+		if (!$this->getRequest()->isPost()) {
+
+			//Attach paginator to current view
+			$paginators[$extPaginator->getName()] = $extPaginator;
+			$this->view->paginators = $paginators;
+		}
+		else {
+			//dispatch paginator's action
+			//before executing the action, we must be sure that this is the selected paginator.
+			if ($extPaginator->getName() == $this->getRequest()->getPost('paginatorName')) {
+			
+				$requestedAction = $extPaginator->getActionToExecute($this->getRequest());
+				
+				$this->_forward(
+				$requestedAction['action'],
+				$requestedAction['controller'],
+				$requestedAction['module'],
+				array ('refPks' => $requestedAction['refPks']
+				));
+			}
+		}
+
+	}
+	/**
+	 * get all re
+	 */
+	public function getRefPKs ()
+	{
+		$refPks = $this->getRequest()->getUserParam('refPKs');
+
+		$this->getRequest()->setParams(array('refPKs' => null));
+
+		return $refPks;
+
+	}
+
+
+	/**
+	 * Default addAction method
+	 * This method can be overwriten in child clases to alter functionality
+	 */
+	public function addAction()
+	{
+		echo 'default ADD action method..';
+	}
+
+	/**
+	 * Default listAction method
+	 * This method can be overwriten in child clases to alter functionality
+	 */
+	public function listAction()
+	{
+		//echo 'not implemented, yet.';
+
+		$elements = $this->getModel();
+
+		$extPaginator = new Inno_Paginator_Extended(
+		$elements->selectElements(),
+		array('delete'=> array(
+														'action' => 'delete'),
+										  'move'  => array(
+														'action' => 'move')
+		));
+
+
+		/** run extended paginator */
+		$this->runExtendedPaginator( $extPaginator );
+	}
+}
+?>

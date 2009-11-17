@@ -1,0 +1,177 @@
+<?php
+/**
+ * Class used to implement the functionality for the Extended Paginator
+ *
+ *
+ * @author Iulian
+ *
+ */
+
+class Zend_Controller_Action_Helper_ExtendedPaginator extends Zend_Controller_Action_Helper_Abstract
+{
+	
+	/**
+	 * Session Namespace.
+	 * 
+	 * @var string 
+	 */
+	protected $_namespace = 'extendedPaginator';
+	
+	/**
+	 * session object. 
+	 * 
+	 * @var Zend_Session_Namespace 
+	 */
+	protected $_session = null;  
+	
+	/**
+	 * Initialize the extended paginator in controller environment
+	 * if the paginator wants to execute the action it will save in session refPks and returnAction
+	 *
+	 * @param Inno_Paginator_Extended $extPaginator
+	 * @return none
+	 */
+	public function run(Inno_Paginator_Extended $extPaginator)
+	{
+		$request = $this->getRequest();
+		$extPaginator->init($request);
+
+		if ($request->isPost()) {
+			if ($extPaginator->getName() == $request->getPost('paginatorName')) {
+
+				//if request is post .. paginator should execute the submited action
+				//executing the action can be performed by telling Front COntroller to dispatch another action.
+				$requestedAction = $extPaginator->getActionToExecute($request);
+				//Zend_Debug::dump($requestedAction);
+				
+				//save data (params) to session in order to be retrieved by the requested action
+				$this->saveData($extPaginator);
+				
+				//redirect to the action to be executed
+				$redirector = $this->getActionController()->getHelper('Redirector');
+				$redirector->gotoSimple($requestedAction['action'],
+										$requestedAction['controller'],
+										$requestedAction['module'] 
+										);						
+			}
+		}
+	}
+	
+	/**
+	 * Save refPks and returnAction in session to be used by the requested action
+	 * 
+	 * @param $extPaginator
+	 * @return none
+	 */
+	public function saveData(Inno_Paginator_Extended $extPaginator)
+	{
+		$request = $this->getRequest();
+		$session = $this->getSession();
+		
+		$session->data = array (
+					'refPks' => $extPaginator->getSelectedRefPks($request),
+					'executeAction' => $extPaginator->getActionToExecute($request),
+					'returnAction' => $this->getActionController()->getHelper('Url')->url(),
+				);																		
+	}
+	
+	/**
+	 * retrieves data saved by the previous controller and 
+	 *  cleans the session 
+	 * 
+	 * @param $namespace 
+	 * 				- tries to retrieve data from a custom namespace.
+	 * 				- by default it will retrieve data from default namespace 
+	 *  
+	 * @return none 
+	 * 
+	 */
+	public function getSavedData($namespace = null)
+	{
+		$request = $this->getFrontController()->getRequest();
+		
+		if ($namespace !==null) {
+			$this->setNamespace($namespace);
+		}
+		$session = $this->getSession(); 
+		$data = $session->data;
+		$executeAction = $data['executeAction'];
+		
+		//validate that the current Action is the one from the session
+		//if ($this->isAppropriateRequest($executeAction)) {
+		$session->unsetAll(); 
+		return $data;	
+		//}
+		return null; 
+	}
+	
+	/**
+     * setNamespace() - change the namespace 
+     *
+     * @param  string $namespace
+     * @return Zend_Controller_Action_Helper_ExtendedPaginator Provides a fluent interface
+     */
+    public function setNamespace($namespace = null)
+    {
+    	if (namespace !== null) {
+        	$this->_namespace = $namespace;
+    	}
+    	
+        return $this;
+    }
+    
+    /**
+     * get the namespace 
+     * 
+     * @return string
+     */
+    public function getNamespace ()
+    {
+    	return $this->_namespace;
+    }
+    
+    public function getSession()
+    {
+    	if ($this->_session === null) {
+    		$this->_session = new Zend_Session_Namespace($this->getNamespace());
+    	}
+    	
+    	return $this->_session;
+    }
+
+    /**
+     * Will compare executeAction with request data from frontController Request object
+     * If they match will return true. 
+     * 
+     * @param $executeAction -array(controller,action,module)
+     * @return boolean
+     */
+    public function isAppropriateRequest($executeAction)
+    { 
+    	Zend_Debug::dump($executeAction, 'executeAction1');
+    	
+    	
+    	$request = $this->getFrontController()->getRequest(); 
+    	$reqParams = array(
+    					'module' => $request->getModuleName(),
+    					'action' => $request->getActionName(),
+    					'controller' => $request->getControllerName(),
+    		);
+    	$executeParams = array(
+    					'module' => $executeAction['module'],
+    					'action' => $executeAction['action'],
+    					'controller' => $executeAction['controller']
+    		);	
+    		
+
+    	if (count(array_intersect_assoc($reqParams, $executeParams)) == count($executeParams)) {
+    		return true; 
+    	}	
+    	else {
+    		return false;
+    	}
+    }
+    
+}
+
+	?>

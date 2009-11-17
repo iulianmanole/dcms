@@ -1,0 +1,226 @@
+@CHARSET "ISO-8859-1";
+
+body {
+background-color:#696969;
+font-size: 12px;
+font-family: "Lucida Grande",Verdana,"Bitstream Vera Sans",Arial,sans-serif;
+margin:0px;
+/* background-image: url(/public/images/banner-bg.png);*/
+background-repeat: repeat-x;
+}
+/* -----------------Start Layout's divs -----------*/
+
+
+#header {
+margin:2em 2em 0 2em;
+margin-left:2em;
+padding:0em 0em;
+height:5em;
+background-color:#778899;
+border:1px solid #eeeeee;
+color: white;
+width: 97%;
+}
+#header-logo {
+	font-family:Arial,Helvetica,Sans-Serif;
+	font-size: 24px;
+	font-weight: bolder;
+	
+}
+#header-logo-small {
+	font-family:Arial,Helvetica,Sans-Serif;
+	font-size: 15px;
+	font-weight: normal;
+	color: black; 
+}
+#container {
+ margin-top:.2em;
+ margin-left:2em;
+ margin-right:2em;
+ width: 97%;
+ background-color: #778899;
+ border:1px solid #eeeeee;
+}
+
+#leftside {
+	position: relative ;
+	float:left;
+	margin-left:.2em;
+	margin-top:.2em;
+	//padding:1em .5em 2em .5em;
+	padding: 0em; 
+	width:14em;
+	font-size:1em;	
+	background-color: #DCDCDC;
+	border:1px solid #eeeeee;
+}
+
+#rightside {
+ margin-top:.2em;
+ margin-left: 15.50em;
+ margin-right:2em;
+ background-color: #C0C0C0;
+ border:1px solid #eeeeee;
+ //clear:none;
+}
+
+#footer {
+ margin-top:.2em;
+ background-color: #C0C0CC;
+ border:1px solid #eeeeee;
+ 
+}
+
+
+html>body #rightside{
+ margin-left:15.50em;
+ margin-right:2em;
+}
+
+#content {
+	background-color: #DCDCDC;	
+	margin: 0.5em;
+}
+	
+#info {
+	background-color: aqua;
+}
+#organizerDiv {
+ height: 1.4em;
+ background-color: #4682B4;
+ color: black; 
+ font-size: 1.2em;
+ font-weight:bold;
+ padding: 5px; 
+ overflow: visible;
+}
+#organizerDiv a:link,#organizerDiv a:visited,#organizerDiv a:hover,#organizerDiv a:active { 
+	color:black; 
+	text-decoration:none; 
+}
+
+/* -----------------End Layout's divs -------------*/
+
+/** ----------------Start Main Menu --------------------*/
+#mainMenu {
+ margin: 0;
+ padding: 0;
+ background-color:white;
+ width: inherited;
+ border-style: solid solid none solid;
+ border-color: #000;
+ border-size: 1px;
+ border-width: 1px;
+}
+
+#mainMenu ul {
+ list-style: none;
+ margin: 0;
+ padding: 0;
+}
+
+#mainMenu li {
+	list-style:none;
+}
+
+#mainMenu li a {
+ height: 32px;
+ voice-family: "\"}\"";
+ voice-family: inherit;
+ height: 24px;
+ text-decoration: none;
+ list-style:none;
+}
+
+#mainMenu li a:link, #mainMenu li a:visited {
+ color: #CCC;
+ display: block;
+ background: url(/public/images/menu4.gif);
+ padding: 8px 0 0 10px;
+}
+
+#mainMenu li a:hover {
+ color: #FFF;
+ background: url(/public/images/menu4.gif) 0 -32px;
+ padding: 8px 0 0 10px;
+ }
+/**----------------End Main Menu ----------------------*/
+
+#contentData {
+ border: #4682B4 solid 3px;
+ /* clear: both; */
+ padding:1em;
+}
+#contentData a, a:link, a:active, a:hover {
+	color:blue;
+}
+	
+/**----------------start content h Menu V2------------------------*/
+
+    #contentMenu {
+      width:100%;
+      background:inherit;
+      font-size:100%;
+      line-height:normal;
+    }
+    #contentMenu ul {
+	  margin:0;
+	  padding: 10px 10px 0px 50px;
+	  font: bold 12px Verdana, sans-serif;
+	  list-style-type: none;
+	  color:inherit;
+    }
+    #contentMenu li {
+      display:inline;
+      list-style: none;
+      margin-right:0px;
+      
+      padding:0px 0px 0px 0px;
+    }
+
+    #contentMenu li a  {
+      background-color: darkblue;
+      text-decoration:none;
+      color: white;
+	  padding: 10px 10px 0px 10px;
+    }
+    #contentMenu li a:hover {
+      background-color:#4682B4;
+    }
+    
+	#contentMenu li.active a{
+		background-color:#4682B4;
+		font-size: 1.1em;
+		/* text-decoration:underline;*/
+	}
+*/
+/*---------end content h Menu v2------------------- */
+/*-----------others------------------*/
+table.paginator{
+	border-collapse:collapse;
+}
+
+tr.paginator-header {
+	background-color: #A9A9A9;
+}
+
+
+tr.paginator td{
+	border-bottom:1px dashed #808080;
+	padding:5px 0 5px 6px;
+}
+table.paginator-container{ 
+}
+
+table.paginator-container th{
+	background-color: #4682B4;
+}
+div.paginator-container-th {
+	text-align:center; 
+	font-family: Arial Black; 
+	font-size: 16px;
+	color: black;
+}
+
+
+}

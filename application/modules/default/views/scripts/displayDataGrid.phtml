@@ -1,0 +1,126 @@
+<?php
+/**
+ *  View Template(partial script) used by DataGrid.
+ *  
+ *  render extended paginator as a data grid.
+ *  
+ */
+// Partial script that must be called with $extPaginator set.
+//$this->paginator = $this->extPaginator->getPaginator();
+
+$dataGridView 		= $this->dataGridView;
+$dataGrid 			= $dataGridView->getDataGrid();
+$this->form 	 	= $dataGrid->getForm(); 
+$displayAttributes 	= $dataGridView->getDisplayAttributes();
+
+//checkboxId will be used to create checkboxes array 
+$checkboxId = 1;
+
+//Show Table Title 
+?>
+
+<?php
+/** there is no data to display. We display a message and return. */
+if (!$dataGrid->isDataToDisplay()) { 
+	echo "No data to display"; 
+	//return;
+}?>
+
+<form   name='<?= $this->form->getName();?>' 
+		action='<?= $this->form->getAction();?>'
+		method='<?= $this->form->getMethod();?>'
+>
+		
+<?php //display paginator elements, with checkboxes ?>
+<?= $this->form->getElement('paginatorName'); ?>
+<?php if (count($dataGrid->getPaginator())): ?>
+	<table class='paginator-container' cellspacing="0" cellpadding="0" width="90%"> 
+	<tr class='paginator-container'>
+		<th> 
+			<div class='paginator-container-th'>
+				<?= $dataGridView->getTitle(); ?>
+			</div>	 
+		</th>
+	</tr>
+	<tr>
+	<table class='paginator'  cellspacing="0" cellpadding="4" width="90%">
+		
+		<?php 
+		//BEGIN display Table Header		
+		$isDisplayedTableHead = false; 
+		if ( !$isDisplayedTableHead ):?>	
+			<tr class='paginator-header'>
+			<td width="25px"></td>
+				<?php foreach ($dataGridView->getDisplayAttributes() as $displayAttribute => $properties): ?>
+						<td> <strong> <?= $displayAttribute ?></strong> </td>
+				<?php endforeach; ?>
+			</tr>
+				<?php $isDisplayedTableHead = true; ?>
+			<?php endif; 
+			//END display Table Header ?>
+			
+		<?php
+		foreach ($dataGrid->getPaginator() as $item):
+		?> 
+			<tr class='paginator'>
+				<td > 
+					<?= //BEGIN Display Checkbox for current element.
+						$this->form->getSubform('checkboxes')->getElement($checkboxId);
+						$checkboxId++;
+						//END Display Checkbox for current element.
+					?>		
+				</td>
+				<?php
+					//BEGIN Items display
+				foreach ($displayAttributes as $displayAttribute => $itemAttrs):?>
+				<td>
+					<?php 	
+					$buffer = '';
+					foreach ($itemAttrs as $attr):
+						//Zend_Debug::dump($item[$elem]);
+						$buffer = $buffer. $item[$attr]. ' ';
+					endforeach;
+					
+					$detailAction = $dataGridView->getDetailLink($displayAttribute); 
+					if ($detailAction) {
+						$paramBuffer = '';
+						foreach ($detailAction['params'] as $key => $itemAttr) {
+							$paramBuffer = $paramBuffer . '/' . $key . '/' . $item[$itemAttr];
+						}
+						$buffer =  	'<a href='. 
+									$dataGridView->getDetailLinkAsString($displayAttribute) .
+									$paramBuffer .
+									'>' . $buffer . '</a>';
+					}
+					echo $buffer;
+					
+					?>
+				</td>				
+				<?php 
+				endforeach;
+				
+				?>
+		<?php endforeach; ?>
+<?php endif; ?>
+<?php if (!$dataGrid->isPaginationDisabled() and $dataGrid->isDataToDisplay()) :?>
+	<tr>
+		<td colspan='<?= count($item);?>'>
+	 		<?= $this->paginationControl($dataGrid->getPaginator(), 'Sliding', 'dpaginatorcontroller.phtml'); ?> 
+		</td>
+		
+	</tr>
+<?php endif; ?>	
+</table>
+</tr>
+</table>
+ 
+
+<div>
+<?php 	//display actions buttons ?>
+		<?php foreach ($dataGrid->getSubmitActions() as $actionName => $actionVal ) :?>
+			<?php //Zend_Debug::dump($this->form->getSubform('actions')->getElement($actionName)); ?>
+			<?= $this->form->getSubform('actions')->getElement($actionName) ?>
+		<?php endforeach;?>
+</div>
+
+</form>

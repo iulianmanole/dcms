@@ -1,0 +1,16 @@
+<?php
+
+$model 	= $this->model; 
+$form 	= $model->getForm('SetGroup');
+
+$form->setName('equipment_set_group')
+	 ->setMethod('post')
+	 ->setAction('/inventory/equipment/process-set-group') ;
+
+//--- Set dojo elements behaviour
+$this->dojo()->enable()
+			 ->registerModulePath("dcms",'/public/js/dcms/')
+	 		 ->requireModule('dcms.utils');
+?>
+
+<?= $form; ?>

@@ -1,0 +1,11 @@
+<?php 
+class Inventory_HwProductController extends Inno_Controller_Action
+{
+	public function listAction()
+	{
+		echo "sssssss";
+	}
+	
+	
+}
+?>

@@ -1,0 +1,11 @@
+2009-10-01T14:45:49+03:00 ERR (3): Inno_Model_Gateway::delete SQLSTATE[HY000]: General error: 1451 Cannot delete or update a parent row: a foreign key constraint fails (`dcms`.`rel_group_equipment`, CONSTRAINT `fk_equipment` FOREIGN KEY (`equipment_id`) REFERENCES `equipment` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION)
+2009-10-01T15:41:37+03:00 INFO (6): 1 Equipments id("were deleted. RefInventory_EquipmentController::deleteAction
+2009-10-01T15:47:50+03:00 INFO (6): Inventory_EquipmentController::deleteAction Deleted 1 equipments with ids("Array")
+2009-10-01T15:50:03+03:00 INFO (6): Inventory_EquipmentController::deleteAction Deleted 1 equipments with ids("3")
+2009-10-01T15:50:35+03:00 WARN (4): Inventory_EquipmentController::deleteAction Selected Equipments id("")
+2009-10-01T16:11:47+03:00 INFO (6): Inventory_EquipmentController::processAddActionEquipment(id=5) was added succesfully.
+2009-10-01T16:12:26+03:00 INFO (6): Inventory_EquipmentController::processAddActionEquipment(id=6) was added succesfully.
+2009-10-01T16:23:22+03:00 INFO (6): Inventory_EquipmentController::processAddAction Equipment(id=7) was added succesfully.
+2009-10-01T16:23:42+03:00 INFO (6): Inventory_EquipmentController::deleteAction Deleted 3 equipments with ids("5,6,7")
+2009-10-01T16:41:19+03:00 INFO (6): Inventory_EquipmentController::processAddAction Equipment(id=8) was added succesfully.
+2009-10-01T17:07:14+03:00 INFO (6): Inventory_EquipmentController::deleteAction Deleted 1 equipments with ids("8")

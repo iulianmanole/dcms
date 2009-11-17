@@ -1,0 +1,10 @@
+Obiective urgente.
+
+ - prelucrarea formului equipmentAdd. Crearea primelor obiecte in baza de date.
+ - Securitate si validarea formului ( etapa 2) 
+ 	  >> Definirea unui TokenID pentru fiecare form. Acesta va fi salvat in form si sesiune.
+ 	  		> TokenID-ul indetifica unic un form in sesiune. 
+ 	   
+ 	  >> Fiecare XHR va trimite si TokenID-ul. 
+ 	  		>Actiunea care primeste XHR-ul verifica daca TokenID-ul trimis de formular exista in sesiune
+ 	  		>raspunsul la XHR va fi salvat in sesiune, pentru a putea fi verificat la prelucrarea formului.    

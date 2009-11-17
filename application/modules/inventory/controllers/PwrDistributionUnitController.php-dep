@@ -1,0 +1,87 @@
+<?php 
+
+class Inventory_PwrDistributionUnitController extends Inno_Controller_Action
+{
+	/**
+	 * @var Model_HwProduct model used by this controller.
+	 */
+	protected $_model = null;
+
+	/**
+	 * @return Model_PwrDistributionUnit
+	 */
+	public function getModel()
+	{
+		return $this->_model; 
+	}
+	
+	public function preDispatch() 
+	{ 	
+		//Instantiate an empti model.
+		$this->_model 		= new Model_PwrDistributionUnit(array(), array( 'gateway' => new Model_PwrDistributionUnitGateway()));	
+		$this->view->model 	= $this->_model; 
+	}
+	
+	public function addAction()
+	{
+		
+	}
+	
+	/**
+	 * @return none
+	 */
+	public function deleteAction()
+	{
+		$toDeleteIds 	 = $this->getRequest()->getUserParam('refPks');
+		
+		$deletedProducts = $this->getModel()->getGateway()->deletePdus($toDeleteIds);
+		
+		if ($deletedProducts) {
+			$objectName = $deletedProducts-1 ? 'objects' : 'object';
+			$msg = 'You have deleted '.$deletedProducts.' '.$objectName;
+			
+		} else {
+			$msg = 'Unable to delete Data.';
+		}
+		
+		//redirect to the previous operation and send message
+		$this->getFlashMessenger()->addMessage($msg);
+		$this->getRedirector()->gotoUrl($this->getRequest()->getRequestUri());
+	}
+	
+	/**
+	 * 
+	 * @return none
+	 */
+	public function listAction() 
+	{	
+		$this->view->assign( array(
+				'',
+				'modelGw'		=> new Model_PwrDistributionUnitGateway(), 
+				'request'		=> $this->getRequest()		
+		));
+	}
+	
+	/**
+	 * 
+	 * @return none
+	 */
+	public function viewAction()
+	{
+		//get Id param from request
+		if (!$id = $this->_getParam('id')) {
+			$this->getFlashMessenger()->addMessage('PDU ID was not specified');
+			$this->getRedirector()->gotoSimple('list');
+		}
+		
+		//fetch requested ProductID from DB
+		if (!$this->_model->fetch($id)) {
+			$this->render('not-found');
+		} else {
+			$this->view->model = $this->_model; 
+		}	
+	}	
+}
+
+
+?>

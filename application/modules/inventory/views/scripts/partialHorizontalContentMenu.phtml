@@ -1,0 +1,25 @@
+<div style="font-size:15 ; border-width: 100; border-color: black; ">
+<?php
+
+
+if (!isset( $this->organizerPath )) {
+	throw new Zend_View_Exception ('PartialOrganizerPathDiv - variable $this->organizerPath is not set.');	
+}
+if (!isset( $this->url)) {
+	throw new Zend_View_Exception ('PartialOrganizerPathDiv - variable $this->url is not set.');	
+}
+
+if (!isset( $this->indentificator)) {
+	$identificator = 'id';
+}
+
+
+
+foreach($this->organizerPath as $step) {
+	echo '/';
+	echo "<a style='font-size: 15;'  href='". $this->url."/".$identificator."/".$step['id']."'>".$step['name'].'</a> ';
+}
+
+?>
+
+</div>

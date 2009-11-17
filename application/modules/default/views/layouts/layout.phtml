@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<link rel="stylesheet" type="text/css" href="/public/css/style01.css" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8?" />
+<!--   	<script type="text/javascript" src="/public/js/prototype.js"></script>
+	<script type="text/javascript" src="/public/js/dcms_utils.js"></script>
+	
+-->
+<?php
+
+// Dojo assembly
+if ($this->dojo()->isEnabled()):
+	$this->dojo()->setLocalPath('/public/js/dojo.1.3rc1/dojo/dojo.js')
+		->addStyleSheetModule('dijit.themes.tundra');
+	echo $this->dojo();
+endif;
+?>
+</head>
+<body >
+
+<div id='header'> 
+
+<div id='header-logo-small'> <h1> datacenter management system </h1></div>
+
+</div>
+
+<div id='container' >
+	<!-- CtrDiv <br> -->
+	<div id='leftside' style="clear: right;">
+		<!-- LeftSide Div -->
+		<!-- <pre>Menu Div</pre> -->
+		<div id='mainMenu'>
+			<ul>
+				<li><a Title ='Locations' href='/inventory/location/list'> Locations </a></li>
+				<li><a Title ='Equipments' href='/inventory/equipment/'>Equipments</a></li>
+				<li><a Title ='Racks' href='/inventory/rack/list/'>Racks</a></li>
+				<li><a Title ='Hardware Types' href='/inventory/hw-type/list'> HW Types</a></li>
+				<li><a Title ='HwProducts' href='/inventory/hw-product/list'> HW Products</a></li>
+				<li><a Title ='Groups' href='/inventory/group/list'> Groups</a></li>
+				<li><a Title ='Systems' href='/inventory/system/list'> Systems</a></li>
+			</ul>
+		</div> 
+	</div>	
+
+	<div id='rightside'>
+		<!-- RightSideDiv -->
+		<div id="organizerDiv">
+			<?php echo $this->layout()->organizerDiv; ?>
+		</div>
+		<div id="info">
+			...Info DIV
+			<?php  Zend_Debug::dump($this->messages) ;?>
+		</div>
+		<div id="content">
+			<!-- Content Div <br/> -->
+			<div id="contentMenu">
+				<?= $this->navigation()->menu(); //render the contentMenu, by using Zend_View_Helper_Navigation?>
+			</div>
+			
+			<div id="contentData"> 
+			<?php echo $this->layout()->content; ?>
+			</div>
+		</div>
+	</div>
+<div style="clear:both;"></div>
+<div id='footer' align="center">Footer Element @work in progress </div>
+
+</div>
+</body>
+</html>

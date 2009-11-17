@@ -1,0 +1,7 @@
+<?php
+?>
+	<ul>
+		<li id="active"><a title="Link 1" href="/inventory/location/list">Subs</a></li>
+		<li> <a title="Link 2" href="/inventory/location/list-all-locations"><span>list ALL</span></a></li>
+		<li> <a title="Link 3" href="#"><span>Devices</span></a></li>
+	</ul>

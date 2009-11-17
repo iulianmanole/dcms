@@ -1,0 +1,67 @@
+<?php
+
+$model 	= $this->model; 
+$form 	= $model->getForm('add');
+//Zend_Debug::dump($form->getValues(),'formValues in add.phtml');
+
+
+$form->setName('equipment_add')
+	 ->setMethod('post')
+	 ->setAction('/inventory/equipment/process-add') ;
+	 
+
+//$form->updateRackElement($form->getValues());
+$form->updateHwProductIdElement($form->getValues());
+	 
+//--- Set dojo elements behaviour
+$this->dojo()->enable()
+			 ->registerModulePath("dcms",'/public/js/dcms/')
+	 		 ->requireModule('dcms.utils');
+
+
+$hwProductOptions = Zend_Json::encode(
+			array(
+				'actionElem'=> 'manufacturer',
+				'action'	=> 'onchange',
+				'form'		=> 'equipment_add',
+				'toModify'	=> 'div_hw_product_id',
+				'url'		=> '/inventory/equipment/update-product-list/format/html'
+			));	 
+
+$hwProductOptions2 = Zend_Json::encode(
+			array(
+				'actionElem'=> 'hw_type',
+				'action'	=> 'onchange',
+				'form'		=> 'equipment_add',
+				'toModify'	=> 'div_hw_product_id',
+				'url'		=> '/inventory/equipment/update-product-list/format/html'
+			));	 
+/*
+$rackOptions = 	Zend_Json::encode(
+			array(
+				'actionElem'=> 'hw_product_id',
+				'action'	=> 'onchange',
+				'form'		=> 'equipment_add',
+				'toModify'	=> 'div_rack_id',
+				'url'		=> '/inventory/equipment/update-rack/format/html'
+			));
+			*/	 		
+$rackOptions2 = Zend_Json::encode(
+			array(
+				'actionElem'=> 'hw_location_id',
+				'action'	=> 'onchange',
+				'form'		=> 'equipment_add',
+				'toModify'	=> 'div_rack_id',
+				'url'		=> '/inventory/equipment/update-rack/format/html'
+			));	 
+			
+$this->dojo()->addOnLoad("function(){dcms.utils.modifyElem($hwProductOptions);}");	 
+$this->dojo()->addOnLoad("function(){dcms.utils.modifyElem($hwProductOptions2);}");
+/*
+$this->dojo()->addOnLoad("function(){dcms.utils.modifyElem($rackOptions);}");
+*/
+$this->dojo()->addOnLoad("function(){dcms.utils.modifyElem($rackOptions2);}");
+
+?>
+
+<?= $form; ?>

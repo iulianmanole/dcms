@@ -1,0 +1,221 @@
+<?php
+/* Load Zend_Controller_Action class */
+require_once 'Zend/Controller/Action.php';
+class Inventory_EquipmentController extends Inno_Controller_Action_BaseForm
+{
+	protected $_modelName = 'dcms_Equipments';
+
+	protected $_formName  = 'forms_EquipmentAdd';
+
+	protected $_mapFormToModel = array ('name' => 'name',
+										'sn'	=>'sn',
+										'location'=>'location',
+										'product' => 'product',
+										'rack'=>'rack');
+
+	public function init()
+	{
+		/** Init ajaxContext Helper */
+		$ajaxContext = $this->_helper->getHelper('AjaxContext');
+
+		$ajaxContext->addActionContext('update-products-list', array ('html'))
+					->addActionContext('update-racks-list',  array ('html', 'json'))
+					->initContext();
+		 
+		parent::init();
+		
+
+	}
+	 
+	function indexAction()
+	{
+		Zend_Debug::dump($this);
+	}
+
+	/**
+	 * It is used to add a new equipment
+	 *
+	 * @param via post
+	 * @return true
+	 *
+	 */
+	function addEquipmentAction()
+	{
+		/* Load specific form  */
+		$form = $this->getForm();
+		
+		if (!$this->getRequest()->isPost()) {
+			/* Now, we should display the form.*/
+			$form->addAttribs(array('name'	=>'AddEquipment',
+									'action'=>'/inventory/equipment/add-equipment',
+									'method'=>'post'));
+				
+			$this->view->form = $form;
+			return $this->render('addEquipment');
+		}
+
+		$this->addDataToModel();
+		$this->getRedirector()->gotoSimple('extended-list');	
+	}
+
+	/**
+	 * List all equipments that are present in database. It is just a simple view
+	 * Elements : -paginator ( Uses Db Adapter)
+	 * 			  -select object(defined as a method of the model)
+	 * To display the table, the paginator will use custom view (list.phtml)
+	 *
+	 * @todo reduce list.phtml, by making a partial view to display the table.
+	 *
+	 * @return nothing
+	 */
+	function listAction()
+	{
+		$eq = new dcms_Equipments();
+
+		$paginator = new Zend_Paginator(new Zend_Paginator_Adapter_DbSelect($eq->selectEquipments()));
+		$paginator->setCurrentPageNumber($this->_getParam('page'));
+		//items on page are define by $count
+		$count = $this->_getParam('count', '10');
+		$paginator->setItemCountPerPage($count);
+		$this->view->paginator = $paginator;
+	}
+
+	/**
+	 * list all equipments using extended Paginator.
+	 */
+	public function extendedListAction()
+	{
+		$eq = new dcms_Equipments();
+		
+		//Perform extendedPaginator instantiation
+		require_once ('Inno/Paginator/Extended.php');
+		$extPaginator = new Inno_Paginator_Extended('extList',$eq->selectEquipments(), 
+													array(
+														'Delete'=>array(
+																	'action'	=>'delete',
+																	'controller'=>'equipment', 
+																	'module'	=>'inventory'
+																 	)
+														),
+													array(	'action' 	=>'a',
+															'controller'=>'a',
+															'module'	=>'a'
+														  )	
+													);
+		$extPaginator->setSubmitAction('Delete','delete','equipment','inventory');
+		$extPaginator->setSubmitAction('Move', 'move');												
+														
+		/** run the paginator.*/
+		$this->runExtendedPaginator( $extPaginator );
+	}
+	
+	/**
+	 * Update product list. Returns an select element populated with data.
+	 * @var displayList = true  if both manufacturer and type are set
+	 * 					= false if manufacturer and/or type are not set.
+	 * @return products List (eqModel) populated or not, based on displayList
+	 *
+	 * @todo displayList condition
+	 */
+	function updateProductsListAction()
+	{
+		$form  		= 'forms_EquipmentAdd';
+		$db			= 'dcms_ProductsHw';
+		/** required form elements mapped to db in order cu create the response elem */
+		$formDbMap	= array ('type'=>'type', 'manufacturer'=>'manufacturer');
+		/** Additional Db where Clauses, will added to the dbQuery*/
+		$dbClauses  = array();
+		/**
+		 * Attr that will be used to populate response elem.
+		 *	$valueAttr can be an array of db Attributes
+		 */
+		$respAttr = array ('keyAttr' => 'id', 'valueAttr' => 'name');
+
+		$respElem	= 'product';
+		$formData  	= $this->_request->getPost();
+
+		/** Load UpdateFormElement Helper */
+		$elemHelper = $this->getHelper('XhrResponse');
+
+		/**  Attach the response element to the view*/
+		$this->view->elem = $elemHelper->getResp($form, $db, $formDbMap, $dbClauses, $respAttr, $respElem, $formData);
+
+	}
+
+	/**
+	 * Update rack list.
+	 * @return racks List, based on the location that is selected.
+	 */
+	function updateRacksListAction()
+	{
+		$form  		= 'forms_EquipmentAdd';
+		$db			= 'dcms_Racks';
+		/** required form elements mapped to db in order cu create the response elem */
+		$formDbMap	= array ('location' => 'location');
+		/** Additional Db where Clauses, will added to the dbQuery*/
+		$dbClauses  = array();
+		/**
+		 * Attr that will be used to populate response elem.
+		 *	$valueAttr can be an array of db Attributes
+		 */
+		$respAttr = array ('keyAttr' => 'id', 'valueAttr' => 'name');
+
+		$respElem	= 'rack';
+		$formData  	= $this->_request->getPost();
+
+		/** Load UpdateFormElement Helper */
+		$elemHelper = $this->getHelper('XhrResponse');
+
+		/**  Attach the response element to the view*/
+		$this->view->elem = $elemHelper->getResp($form, $db, $formDbMap, $dbClauses, $respAttr, $respElem, $formData);
+
+	}
+	
+	/**
+	 * Move selected equipments to another location
+	 * @todo  it is unimplemented
+	 */
+	public function moveAction()
+	{
+		echo "not implemented, yet.";
+	}
+	
+	/**
+	 * Delete the specified equipments by id.
+	 * It is called from extended-list
+	 */
+	public function deleteAction()
+	{
+		$toDeleteIds = $this->getRefPKs();
+		$this->deleteIds($toDeleteIds);
+		$this->getRedirector()->gotoSimple('extended-list');
+	}
+	
+	/**
+	 * Renders all the information for a certain equipment
+	 * 
+	 */
+	public function infoAction()
+	{
+		echo "NOT implemented, yet."; 
+	}
+	
+	
+	function testAction()
+	{
+		$db = new dcms_Equipments();
+
+		Zend_Debug::dump($db->findEquipments(null, array('id', 'name','is_model')));
+	}
+	
+	/**
+	 * Simple action that tests Extended-List created with extended Paginator
+	 */ 
+	public function testextendedAction() 
+	{
+		$this->view->val = $this->getRefPKs();
+		$this->view->val2 = $this->getRefPKs();
+	}
+}
+
+?>

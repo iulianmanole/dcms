@@ -1,0 +1,35 @@
+<?php 
+	
+ $modelGw = $this->modelGw;
+ $request = $this->request;
+
+ $criteria = null; 
+ 
+ $selectAllPdus = $modelGw->selectAllPdus($criteria);
+ $extPaginator 	 = new Inno_Paginator_Extended('Pdus', $selectAllPdus);
+ 											
+ 
+ $extPaginator->setSubmitAction('Add', 'add', 'pwr-distribution-unit', 'inventory')
+ 			 	->setSubmitAction('Delete', 'delete', 'pwr-distribution-unit', 'inventory');
+ 			 	
+ $extPaginator->getPaginatorView()->setTitle('Power Distribution Units');
+ 
+ $extPaginator->getPaginatorView()
+ 					->setDisplayAttribute('Power Distribution Unit', array ('name'))
+ 					->setDisplayAttribute('Product', array ('hw_product'))
+ 					->setDisplayAttribute('Manufacturer', array ('manufacturer'));
+ 
+ $extPaginator->getPaginatorView()
+ 					->setDetailAction('Power Distribution Unit', 'view', 'pwr-distribution-unit', 'inventory', array('id'=>'id'));
+					
+ 					
+ 					
+ $extPaginator->run($request);
+ 
+?>
+
+
+<?= $extPaginator; ?>
+
+
+?>

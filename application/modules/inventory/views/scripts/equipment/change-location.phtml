@@ -1,0 +1,30 @@
+<?php
+
+$model 	= $this->model; 
+$form 	= $model->getForm('changeLocation');
+
+$form->setName('equipment_change_location')
+	 ->setMethod('post')
+	 ->setAction('/inventory/equipment/process-change-location') ;
+
+//--- Set dojo elements behaviour
+$this->dojo()->enable()
+			 ->registerModulePath("dcms",'/public/js/dcms/')
+	 		 ->requireModule('dcms.utils');
+	 
+$rackOptions2 = Zend_Json::encode(
+			array(
+				'actionElem'=> 'hw_location_id',
+				'action'	=> 'onchange',
+				'form'		=> 'equipment_change_location',
+				'toModify'	=> 'div_rack_id',
+				'url'		=> '/inventory/equipment/change-rack/format/html'
+			));	 
+
+$this->dojo()->addOnLoad("function(){dcms.utils.modifyElem($rackOptions2);}");
+
+
+?>
+
+
+<?= $form; ?>

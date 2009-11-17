@@ -1,0 +1,24 @@
+<?php
+/**
+ * Create a tabbed list based on 2 parameters:
+ * 	 - this->tabs =  array ( 'actionName'=>array ('action'=>'action to execute', 
+ *								  'name'=> 'Name to display for this tab'),...
+ *   - this->selectedTab - the tab that must be marked as selected.
+ */
+?>
+
+<ul id='menu'>
+<?php foreach ($this->tabs as $key=>$tab):?>
+	<?php if ($key == $this->selectedTab): ?>
+		<li id='activetab'>
+	<?php else: ?>
+		<li id='menu'>
+		<?php endif; ?>
+	<a href="<?= $tab['action'] ?>"> <?= $tab['name'] ?> </a> 
+</li>
+<?php endforeach;?>
+
+</ul>
+<?php 
+?>
+

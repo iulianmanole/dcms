@@ -1,0 +1,6 @@
+
+<h1>Equipments List</h1>
+
+<?= $this->partial('displayTable.phtml', 'default',array('paginator'=> $this->paginator)); ?>
+
+<?= $this->paginationControl($this->paginator, 'Sliding', 'dpaginatorcontroller.phtml'); ?>

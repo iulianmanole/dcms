@@ -1,0 +1,15 @@
+
+dcmsUtilsJS.modifyElement will modify an element. 
+
+	 	@param actionedElement is the element that will cause the action to execute. 
+  						Typically, this will be a button, but is not restricted only to this. 
+ 
+  		@param eventName is the event on witch our actiondElement will start the action execution.
+  						Typically, it will be an DOM Level 2 Events (http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-eventgroupings)
+  						Important events are : load, click, select, change, submit, reset, focus, etc. 
+  
+  		@param handlerUrl is the url to witch the XHR will be sent
+  
+  		@param handlerTarget is the element that will be replaced based on the XHR Response.
+  
+  		@param handlerParams is the list of parameters, and their values that will be sent to the handlerUrl, using XHR

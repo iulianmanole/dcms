@@ -1,0 +1,6 @@
+Error 1005 ( errno: 121)
+ - Cauza 1: FK nu sunt corect definite 
+ - Cauza 2: numele FK nu este unic. Orice nume de FK ----trebuie ---- sa fie unic in baza de date. 
+
+Error 1064 
+ - Cauza : Unul din atributele tabelei nu este corect definit.DE obicei se intampla sa nu aiba tipul pus :)

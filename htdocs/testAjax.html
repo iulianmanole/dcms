@@ -1,0 +1,47 @@
+<html>
+<head>
+<title>Dojo example</title>
+<style type="text/css">
+  @import "pathtodojo/dijit/themes/nihilo/nihilo.css";
+</style>
+<style>
+  div.ref     { background-color: #fcc; }
+  div.node    { background-color: #cfc; }
+  div.child   { background-color: #ffc; }
+  div.ref div { margin-left: 3em; }
+</style>
+<script type="text/javascript" src="public/js/dojo/dojo/dojo.js.uncompressed1.3rc1.js" djConfig="parseOnLoad:true, isDebug: true"></script>
+
+<script>
+  dojo.addOnLoad(function(){
+    var n = 0;
+    dojo.connect(dojo.byId("placeFLO"), "onclick", function(){
+      //inputDiv = document.createElement("div");
+	  inputDiv = "<div> Gigiiii </div>"; 
+	  dojo.place(inputDiv, "refFLO",
+        dojo.byId("posFLO").value); // first/last/only
+    });
+  });
+</script>
+<body class="nihilo">
+<p>
+  <button id="placeFLO">Place node</button>
+  <select id="posFLO">
+    <option value="first">first</option>
+    <option value="last">last</option>
+    <option value="only">only</option>
+  </select>
+</p>
+<p>
+  <div>before: 1st</div>
+  <div>before: 2nd</div>
+  <div id="refFLO" class="ref">
+    <div class="child">the reference node's child #0</div>
+    <div class="child">the reference node's child #1</div>
+    <div class="child">the reference node's child #2</div>
+  </div>
+  <div>after: 1st</div>
+  <div>after: 2nd</div>
+</p>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<?php
+$model 	= $this->model; 
+$form 	= $model->getForm('add');
+
+$form->setName('manufacturer_add')
+	 ->setMethod('post')
+	 ->setAction('/inventory/manufacturer/process-add') ;
+
+?>
+
+<?= $form; ?>
